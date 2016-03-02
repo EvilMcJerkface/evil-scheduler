@@ -1,0 +1,124 @@
+#yabandeh {
+    margin-left: 2em;
+    margin-top: 1em;
+}
+
+#yabandeh h2 {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+#yabandeh a {
+    color: blue;
+}
+
+/* cursors */
+
+pre {
+    font-family: monospace;
+}
+pre {
+    margin: 0;
+}
+pre.thread0 {
+    background-color: cadetblue;
+}
+pre.thread1 {
+    background-color: gold;
+}
+pre.thread01 {
+    background-color: darkseagreen;
+}
+
+/* columns */
+
+.first-td {
+    vertical-align: text-top;
+}
+.second-td {
+    vertical-align: text-top;
+    padding-left: 5px;
+}
+.third-td {
+    vertical-align: text-top;
+    padding-left: 5px;
+}
+
+/* */
+
+.third-td h3 {
+    font-size: 1.1em;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+.codeView {
+    padding: 5px;
+    background-color: bisque;
+}
+
+.second-td > .codeView {
+    margin-bottom: 5px;
+}
+
+.third-td > .info-block {
+    margin-bottom: 5px;
+}
+
+
+/* threadControl */
+
+.threadview .threadControl {
+    margin-top: 3px;
+}
+
+.threadview .threadControl span {
+    margin-left: 0.5em;
+    font-size: 1em;
+}
+
+
+/* dbview, txview */
+
+.dbview table {
+    border-collapse: collapse;
+}
+.dbview td {
+    border: 1px solid;
+    text-align: right;
+    padding-right: 3px;
+}
+.dbview th {
+    min-width: 2em;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.dbview .header th {
+    padding-bottom: 3px;
+    text-align: center;
+}
+
+
+.txview table {
+    border-collapse: collapse;
+}
+.txview td {
+    border: 1px solid;
+    text-align: right;
+    padding-right: 4px;
+    padding-left: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+.txview th {
+    min-width: 2em;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+.txview .header th {
+    padding-bottom: 3px;
+    text-align: center;
+}
