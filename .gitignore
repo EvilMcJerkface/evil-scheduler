@@ -1,5 +1,6 @@
 .DS_Store
 node_modules/
 html/js/yabandeh.js
+html/js/ramp.js
 html/js/react.js
 html/js/react-dom.js

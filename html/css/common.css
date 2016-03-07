@@ -1,0 +1,57 @@
+.thread-view .thread-control {
+    margin-bottom: 3px;
+}
+
+.thread-view .tv-btn {
+    position: relative;
+    bottom: 1px;
+    margin-left: 3px;
+}
+
+.thread-view .tv-status {
+    margin-left: 3px;
+}
+
+.codeView {
+    padding: 5px;
+    color: #F8F8F2;
+    font-size: 0.8em;
+    font-family: Monaco, monospace;
+    background-color: #282828;
+}
+
+.codeView .function {
+    color: #66D9EF;
+    font-style: italic;
+}
+
+.codeView .var {
+    color: #66D9EF;
+    font-style: italic;
+}
+
+.codeView .return {
+    color: #F92672;
+}
+
+.codeView .fun-name {
+    color: #A6E22E;
+}
+
+.codeView .number {
+    color: #7FB347;
+}
+
+.codeView .this {
+    color: #D197D9;
+}
+
+.codeView .code_link {
+    text-decoration: underline;
+    color: #FD971F;
+    cursor: pointer;
+}
+
+pre {
+    margin: 0;
+}

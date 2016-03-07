@@ -1,0 +1,65 @@
+/// server-side
+
+function prepare(values) {
+    DB(<[ db.versions U= values ]>)
+}
+
+function commit(txid) {
+    DB(<[
+        for v in db.versions.when(y => y.txid == txid): 
+            for c in db.committed.when(y => y.key == v.key):
+                c.txid = max(c.txid, txid)
+    ]>);
+}
+
+function get(db, ids) {
+    return DB(<[
+        for id in ids:
+            if id.txid == null:
+                id.txid = db.committed.find(x => x.key==id.key).txid
+            yield db.versions.find(x => x.key==id.key && x.txid==id.txid)
+    ]>);
+}
+
+// agent
+
+function Proposer(proposer_id, n) {
+    this.proposer_id = proposer_id;
+    this.n = n;
+    this.put_all = function(changes) {
+        var txid = 100*(this.n++) + this.proposer_id;
+        var md = set(changes.map((key,_)=>key))
+        var by_shard = changes.map((key,value) => {
+            key: key,
+            txid: txid,
+            value: value,
+            md: md - { key }
+        }).group_by(x=>shard(x.key));
+        by_shard.each((shard,values) => {
+            dbs[shard].prepare(values);
+        });
+        by_shard.each((shard,_) => {
+            dbs[shard].commit(txid);
+        });
+    };
+    this.get_all = function(keys) {
+        var ret = {};
+        req(keys.map(key=>{key: key, txid: null}), ret);
+        var versions = [{key: md, txid: r.txid} | r in ret.values(), md in r.md];
+        var latest = versions.aggr(x=>x.key, x=>x.txid, Math.max);
+        var newer = latest.when((key, txid) => key in ret &&  txid > ret[key].txid);
+        req(newer.map((key, txid)=>{key: key, txid: txid}), ret);
+        return ret;
+        function req(query, ret) {
+            query.group_by(x => shard(x.key)).flatMap((s, ks) => {
+                return dbs[s].get(ks).map(x=>(x.key,x));
+            }).each((key,value) => { ret[key]=value; });
+        }
+    }
+}
+
+
+var dbs = ...;
+
+
+

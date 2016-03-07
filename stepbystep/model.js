@@ -1,45 +1,114 @@
 module.exports = {
 	ThreadModel: ThreadModel,
-	AppModel: AppModel
+	AppModel: AppModel,
+    HashVar: HashVar
 };
 
-function ThreadModel(entry_point, app_model, thread_id) {
-    var thread_model = {
+function HashVar(obj) {
+    this.obj = obj;
+}
+
+function ThreadModel(entry_point, app_model, thread_id, h, s) {
+    var self = {
         thread_id: thread_id,
         is_active: false,
         was_active: false,
         was_aborted: false,
         thread: entry_point,
+        color: {h: h, s: s},
+        ts: 0,
+        trace: {},
+        step: {},
+
+        push_frame: function() {
+            app_model.push_frame(self);
+        },
+        pop_frame: function() {
+            app_model.pop_frame(self);
+        },
+        frame_var: function(name, obj) {
+            app_model.frame_var(self, name, obj);
+        },
         init: function() {
-            thread_model.was_active = true;
-            thread_model.was_aborted = false;
-            thread_model.step = thread_model.thread.unit();
-            thread_model.ctx = {};
-            if (thread_model.step.isStep) {
-                thread_model.is_active = true;
-                thread_model.step.pre(thread_id);
+            self.was_active = true;
+            self.was_aborted = false;
+            self.step = self.thread.unit();
+            self.ctx = {
+                __thread: self
+            };
+            
+            while (self.step.isJump || self.step.isAccept) {
+                while (self.step.isJump) {
+                    var phase = self.step.get_action()(self.ctx);
+                    self.ctx = phase.ctx;
+                    self.step = phase.step;
+                }
+                if (self.step.isAccept) {
+                    self.step = self.step.extract();
+                }
             }
-            app_model.notify();
+            
+            if (self.step.isStep) {
+                self.ts += 1;
+                self.is_active = true;
+                self.step.pre(self);
+            }
+            app_model.ticked(self);
+        },
+        unselect: function() {
+            var trace = [];
+            for (var ts in self.trace) {
+                if (!self.trace.hasOwnProperty(ts)) {
+                    continue;
+                }
+                trace.push(ts);
+            }
+            trace.forEach(function(ts) {
+                delete self.trace[ts].marked[self.thread_id]
+                delete self.trace[ts];
+            });
+        },
+        abort: function() {
+            self.unselect();
+            self.was_aborted = true;
+            self.is_active = false;
+            self.ctx = {
+                __thread: self
+            };
+            app_model.clear_frames(self);
+            app_model.ticked(self);
         },
         iter: function() {
-            if (thread_model.step.isStep) {
-                var phase = thread_model.step.action(thread_model.ctx);
-                thread_model.step.post(thread_id);
-                thread_model.ctx = phase.ctx;
-                thread_model.step = phase.step;
-            }
-            if (thread_model.step.isStep) {
-                thread_model.step.pre(thread_id);
-            } else {
-                if (thread_model.step.isZero) {
-                    thread_model.was_aborted = true;
+            if (self.step.isStep) {
+                var phase = self.step.get_action()(self.ctx);
+                self.step.post(self);
+                self.ctx = phase.ctx;
+                self.step = phase.step;
+                while (self.step.isJump || self.step.isAccept) {
+                    while (self.step.isJump) {
+                        var phase = self.step.get_action()(self.ctx);
+                        self.ctx = phase.ctx;
+                        self.step = phase.step;
+                    }
+                    if (self.step.isAccept) {
+                        self.step = self.step.extract();
+                    }
                 }
-                thread_model.is_active = false;
             }
-            app_model.notify();
+            if (self.step.isStep) {
+                self.ts += 1;
+                self.step.pre(self);
+            } else {
+                if (self.step.isZero) {
+                    self.was_aborted = true;
+                }
+                self.is_active = false;
+                self.unselect();
+            }
+            app_model.ticked(self);
         }
     };
-    return thread_model;
+    return self;
 }
 
 function AppModel() {

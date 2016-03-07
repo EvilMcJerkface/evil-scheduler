@@ -13,24 +13,6 @@
     color: blue;
 }
 
-/* cursors */
-
-pre {
-    font-family: monospace;
-}
-pre {
-    margin: 0;
-}
-pre.thread0 {
-    background-color: cadetblue;
-}
-pre.thread1 {
-    background-color: gold;
-}
-pre.thread01 {
-    background-color: darkseagreen;
-}
-
 /* columns */
 
 .first-td {
@@ -51,11 +33,6 @@ pre.thread01 {
     font-size: 1.1em;
     margin-bottom: 2px;
     font-weight: bold;
-}
-
-.codeView {
-    padding: 5px;
-    background-color: bisque;
 }
 
 .second-td > .codeView {
