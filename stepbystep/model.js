@@ -14,20 +14,22 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
         is_active: false,
         was_active: false,
         was_aborted: false,
+        app_model: app_model,
         thread: entry_point,
         color: {h: h, s: s},
         ts: 0,
         trace: {},
         step: {},
+        data: {},
 
         push_frame: function() {
-            app_model.push_frame(self);
+            self.app_model.push_frame(self);
         },
         pop_frame: function() {
-            app_model.pop_frame(self);
+            self.app_model.pop_frame(self);
         },
         frame_var: function(name, obj) {
-            app_model.frame_var(self, name, obj);
+            self.app_model.frame_var(self, name, obj);
         },
         init: function() {
             self.was_active = true;
@@ -37,13 +39,13 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
                 __thread: self
             };
             
-            while (self.step.isJump || self.step.isAccept) {
+            while (self.step.isJump || self.step.isAccept || self.step.isCatch) {
                 while (self.step.isJump) {
                     var phase = self.step.get_action()(self.ctx);
                     self.ctx = phase.ctx;
                     self.step = phase.step;
                 }
-                if (self.step.isAccept) {
+                if (self.step.isAccept || self.step.isCatch) {
                     self.step = self.step.extract();
                 }
             }
@@ -53,7 +55,7 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
                 self.is_active = true;
                 self.step.pre(self);
             }
-            app_model.ticked(self);
+            self.app_model.ticked(self);
         },
         unselect: function() {
             var trace = [];
@@ -75,8 +77,8 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
             self.ctx = {
                 __thread: self
             };
-            app_model.clear_frames(self);
-            app_model.ticked(self);
+            self.app_model.clear_frames(self);
+            self.app_model.ticked(self);
         },
         iter: function() {
             if (self.step.isStep) {
@@ -84,13 +86,13 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
                 self.step.post(self);
                 self.ctx = phase.ctx;
                 self.step = phase.step;
-                while (self.step.isJump || self.step.isAccept) {
+                while (self.step.isJump || self.step.isAccept || self.step.isCatch) {
                     while (self.step.isJump) {
                         var phase = self.step.get_action()(self.ctx);
                         self.ctx = phase.ctx;
                         self.step = phase.step;
                     }
-                    if (self.step.isAccept) {
+                    if (self.step.isAccept || self.step.isCatch) {
                         self.step = self.step.extract();
                     }
                 }
@@ -105,7 +107,7 @@ function ThreadModel(entry_point, app_model, thread_id, h, s) {
                 self.is_active = false;
                 self.unselect();
             }
-            app_model.ticked(self);
+            self.app_model.ticked(self);
         }
     };
     return self;
@@ -118,6 +120,53 @@ function AppModel() {
             if (app_model.on_state_updated != null) {
                 app_model.on_state_updated(app_model);
             }
+        },
+        frames: [],
+        clear_frames: function(thread) {
+            this.frames = this.frames.filter(function(x){
+                return x.thread_id != thread.thread_id;
+            });
+        },
+        push_frame: function(thread) {
+            this.frames.push({
+                thread_id: thread.thread_id,
+                thread: thread,
+                vars: []
+            });
+        },
+        pop_frame: function(thread) {
+            var tail = [];
+            while(true) {
+                var frame = this.frames.pop();
+                if (frame.thread_id==thread.thread_id) {
+                    break
+                }
+                tail.push(frame);
+            }
+            while(tail.length > 0) {
+                this.frames.push(tail.pop());
+            }
+        },
+        frame_var: function(thread, name, obj) {
+            for (var i=this.frames.length-1;i>=0;i--) {
+                if (this.frames[i].thread_id == thread.thread_id) {
+                    this.frames[i].vars = this.frames[i].vars.filter(function(val){
+                        return name==null || val.name!=name;
+                    });
+                    this.frames[i].vars.push({name: name, obj: obj});
+                    return;
+                }
+            }
+            this.push_frame(thread);
+            this.frame_var(thread, name, obj);
+            //throw "WTF?!";
+        },
+        has_frames_var: function() {
+            var count = 0;
+            this.frames.forEach(function(frame) {
+                count += frame.vars.length;
+            });
+            return count > 0;
         }
     };
     return app_model;

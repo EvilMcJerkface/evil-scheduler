@@ -209,8 +209,4 @@ app_model.db = db;
 app_model.ticked = function(thread) {
     app_model.notify();
 };
-app_model.clear_frames = function(thread) {};
-app_model.push_frame = function(thread) {};
-app_model.pop_frame = function(thread) {};
-app_model.frame_var = function(thread, name, obj) {};
 module.exports = app_model;

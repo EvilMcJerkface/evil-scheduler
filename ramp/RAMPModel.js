@@ -133,7 +133,7 @@ var __put_all = Fun(hl2("this.put_all = function(changes) {"), Seq([
     }),
     Statement(hl2(
         "var toptx = changes.map(x => x.txid).reduce(Math.max, 0);\n" +
-        "this.n = Math.max(this.n, toptx / 10);\n" +
+        "this.n = Math.max(this.n, toptx / 100);\n" +
         "var txid = 100*(++this.n) + this.proposer_id;"), 
         function(ctx) {
             ctx.toptx = ctx.changes.map(function(x) { 
@@ -692,52 +692,6 @@ module.exports.ticked = function(thread) {
         if (ctx.__fun === fun) return true;
         return is_called_from(ctx.__seed, fun);
     }
-};
-
-ramp_model.frames = [];
-ramp_model.clear_frames = function(thread) {
-    ramp_model.frames = ramp_model.frames.filter(function(x){
-        return x.thread_id != thread.thread_id;
-    });
-};
-ramp_model.push_frame = function(thread) {
-    ramp_model.frames.push({
-        thread_id: thread.thread_id,
-        thread: thread,
-        vars: []
-    });
-};
-ramp_model.pop_frame = function(thread) {
-    var tail = [];
-    while(true) {
-        var frame = ramp_model.frames.pop();
-        if (frame.thread_id==thread.thread_id) {
-            break
-        }
-        tail.push(frame);
-    }
-    while(tail.length > 0) {
-        ramp_model.frames.push(tail.pop());
-    }
-};
-ramp_model.frame_var = function(thread, name, obj) {
-    for (var i=ramp_model.frames.length-1;i>=0;i--) {
-        if (ramp_model.frames[i].thread_id == thread.thread_id) {
-            ramp_model.frames[i].vars = ramp_model.frames[i].vars.filter(function(val){
-                return name==null || val.name!=name;
-            });
-            ramp_model.frames[i].vars.push({name: name, obj: obj});
-            return;
-        }
-    }
-    throw "WTF?!";
-};
-ramp_model.has_frames_var = function() {
-    var count = 0;
-    module.exports.frames.forEach(function(frame) {
-        count += frame.vars.length;
-    });
-    return count > 0;
 };
 
 ////////////////

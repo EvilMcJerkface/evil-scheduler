@@ -1,3 +1,7 @@
+.details {
+    color: blue;
+}
+
 .thread-view .thread-control {
     margin-bottom: 3px;
 }
@@ -34,12 +38,40 @@
     color: #F92672;
 }
 
+.codeView .bool {
+    color: #ae82ff;
+}
+
+.codeView .while {
+    color: #F92672;
+}
+
+.codeView .if {
+    color: #F92672;
+}
+
+.codeView .else {
+    color: #F92672;
+}
+
+.codeView .try {
+    color: #F92672;
+}
+
+.codeView .catch {
+    color: #F92672;
+}
+
 .codeView .fun-name {
     color: #A6E22E;
 }
 
 .codeView .number {
     color: #7FB347;
+}
+
+.codeView .string {
+    color: #e7db75;
 }
 
 .codeView .this {

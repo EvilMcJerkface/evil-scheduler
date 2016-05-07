@@ -1,0 +1,386 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+}
+
+#paxos {
+    padding: 5px;
+}
+
+
+
+.thread-controls {
+    background-color: black;
+    padding: 5px;
+    width: 250px;
+}
+
+.thread-controls .tv-btn {
+    margin-right: 2px;
+}
+
+.lee-control {
+    background-color: rgb(76, 126, 127);
+    padding: 2px 2px 2px 5px;
+}
+
+.ross-control {
+    background-color: rgb(204, 174, 0);;
+    padding: 2px 2px 2px 5px;
+}
+
+.thread-controls .general {
+    float: left;
+}
+
+.thread-controls .general span {
+    color: rgb(248, 248, 242);
+    font-size: 0.8em;
+    font-family: Monaco, monospace;
+}
+
+.thread-controls .control {
+    float: right;
+}
+
+.thread-controls .clear {
+    clear: both;
+}
+
+
+
+
+.menu {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.menu span {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+
+
+.menulink {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.menulink.free {
+    background-color: white;
+    color: black;
+    text-decoration: inherit;
+    cursor: pointer;
+}
+
+.menulink.dis {
+    color: #888888;
+}
+
+
+
+.menu span.curr {
+    background-color: #DDDDDD;
+    color: black;
+}
+
+.menu span.free {
+    background-color: white;
+    color: black;
+    text-decoration: inherit;
+    cursor: pointer;
+}
+
+.menu span.dis {
+    color: #888888;
+}
+
+
+.value-table table {
+    border-bottom: 1px solid;
+}
+.commit-table table {
+    border-bottom: 1px solid;
+}
+.proposer-table table {
+    border-bottom: 1px solid;
+}
+
+
+.db2-view h3 {
+    font-size: 1.5em;
+}
+.db2-table {
+    border-collapse: collapse;
+}
+.db2-table th {
+    border: 1px solid;
+    text-align: center;
+    background-color: #CCCCCC;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.db2-table .prop {
+    border: 1px solid;
+    text-align: right;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.value-table .prop {
+    border-top: 0 solid;
+    border-bottom: 0 solid;
+}
+.commit-table .prop {
+    border-top: 0 solid;
+    border-bottom: 0 solid;
+}
+.proposer-table .prop {
+    border-top: 0 solid;
+    border-bottom: 0 solid;
+}
+
+.db2-table th.empty {
+    border: 0px solid;
+    background-color: white;
+}
+
+.proposer-table {
+    margin-top: 15px;
+}
+
+.proposer-table .broadcast {
+    margin-top: 5px;
+}
+
+.proposer-table .broadcast .title {
+    margin-bottom: 3px;
+    font-weight: 400;
+}
+
+.proposer-table .broadcast button {
+    margin-right: 3px;
+}
+
+.value-table .gc {
+    margin-left: 5px;
+}
+
+.value-table .gc button {
+    position: relative;
+    bottom: 3px;
+}
+
+
+
+
+.sourceCode.fun {
+    margin-top: 3px;
+}
+
+b {
+    font-weight: bold;
+}
+
+
+
+#yabandeh {
+    margin-left: 2em;
+    margin-top: 1em;
+}
+
+#yabandeh h2 {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+#yabandeh a {
+    color: blue;
+}
+
+/* columns */
+
+.first-td {
+    vertical-align: text-top;
+}
+.second-td {
+    vertical-align: text-top;
+    padding-left: 5px;
+}
+.third-td {
+    vertical-align: text-top;
+    padding-left: 5px;
+}
+
+/* */
+
+.third-td h3 {
+    font-size: 1.1em;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+.second-td > .codeView {
+    margin-bottom: 5px;
+}
+
+
+/* threadControl */
+
+.threadview .threadControl {
+    margin-top: 3px;
+}
+
+.threadview .threadControl span {
+    margin-left: 0.5em;
+    font-size: 1em;
+}
+
+/* */
+.messages-msg {
+    border-style: solid;
+    border-width: 2px;
+    margin-top: 5px;
+}
+.msg-header {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+.msg-body {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+.msg-label {
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+/* varview */
+
+.var-table {
+    border-collapse: collapse;
+}
+.var-name {
+    text-align: right;
+    padding-left: 7px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-weight: 500;
+    position: relative;
+    top: -1px;
+}
+.var-value {
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.value-table {
+    border-collapse: collapse;
+}
+.value-table th.header {
+    border: 1px solid;
+    text-align: center;
+    background-color: #CCCCCC;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.value-table th.header.prop {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.value-table th.empty { }
+.value-table-obj .prop {
+    border: 1px solid;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+
+.help {
+    padding-left: 7px;
+    padding-right: 7px;
+    max-width: 300px;
+}
+
+.help p {
+    margin-top: 4px;
+}
+
+.help .codeView {
+    margin-top: 4px;
+    max-width: 300px;
+    overflow: hidden;
+}
+
+.databases {
+    padding-left: 7px;
+}
+
+.table_name {
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+/* dbview, txview */
+
+.dbview table {
+    border-collapse: collapse;
+}
+.dbview td {
+    border: 1px solid;
+    text-align: right;
+    padding-right: 3px;
+}
+.dbview th {
+    min-width: 2em;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.dbview .header th {
+    padding-bottom: 3px;
+    text-align: center;
+}
+
+
+.txview table {
+    border-collapse: collapse;
+}
+.txview td {
+    border: 1px solid;
+    text-align: right;
+    padding-right: 4px;
+    padding-left: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+.txview th {
+    min-width: 2em;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+.txview .header th {
+    padding-bottom: 3px;
+    text-align: center;
+}

@@ -5,14 +5,25 @@ module.exports = {
     Cond: Cond,
     Fun: Fun,
     Call: Call,
+    Call2: Call2,
     Return: Return,
     Each: Each,
     Nope: Nope,
     Shift: Shift,
     Skip: Skip,
+    Defer: Defer,
+    While: While,
     Wormhole: Wormhole,
-    Marked: Marked
+    Marked: Marked,
+    TryCatch: TryCatch,
+    Throw: ThrowAst,
+    flow: {
+        Throw: Throw,
+        Unit: Unit
+    }
 }
+
+var hl2 = require("./monokai");
 
 /////////////////////
 
@@ -48,6 +59,35 @@ function Jump(action) {
     }
 }
 
+function Throw(obj) {
+    return {
+        isThrow: true,
+        obj: obj,
+        bind: function(g) {
+            if (g.isCatch) {
+                return g.caught(this.obj).bind(g.tail);
+            } else {
+                return this;
+            }
+        }
+    }
+}
+
+function Catch(caught, tail) {
+    return {
+        isCatch: true,
+        caught: caught,
+        tail: tail,
+        extract: function() {
+            return tail;
+        },
+        bind: function(g) {
+            return Catch(caught, this.tail.bind(g));
+        }
+    }
+}
+
+// TODO: implement via try/catch
 function AsReturn(step) {
     return {
         isReturn: true,
@@ -136,6 +176,9 @@ function unmarker(x) {
 
 /////////////////////
 
+// Move to ast.*
+
+// TODO: remove
 function Wormhole() {
     this.pres = [];
     this.posts = [];
@@ -206,6 +249,57 @@ function Skip(action) {
     return self;
 }
 
+function Defer(action) {
+    var self = {
+        action: action,
+        unit: function() {
+            return Jump(function(ctx) {
+                let [step, state] = action(ctx);
+                return Phase(step, state);
+            });
+        },
+        accept_writer: function(offset, writer, shift) {
+            return writer;
+        }
+    };
+    return self;
+}
+
+function TryCatch(try_view, expression, catch_view, pack, handler, end) {
+    var self = {
+        try_view: try_view,
+        expression: expression,
+        catch_view: catch_view,
+        pack: pack,
+        handler: handler,
+        end: end,
+        marked: {},
+        unit: function() {
+            var call = Step(marker(self), function(ctx) {
+                return Phase(expression.unit(), ctx);
+            }, unmarker(self));
+
+            var catcher = Catch(function(obj) {
+                return Jump(function(ctx) {
+                    pack(ctx, obj);
+                    return Phase(self.handler.unit(), ctx);
+                });
+            }, Unit());
+            
+            return call.bind(catcher);
+        },
+        accept_writer: function(offset, writer, shift) {
+            writer.write(self.marked, offset, try_view);
+            self.expression.accept_writer(offset + shift, writer, shift);
+            writer.write(self.marked, offset, catch_view);
+            self.handler.accept_writer(offset + shift, writer, shift);
+            writer.write(self.marked, offset, end);
+            return writer;
+        }
+    };
+    return self;
+}
+
 function Return(view, selector) {
     var self = {
         view: view,
@@ -225,6 +319,26 @@ function Return(view, selector) {
     return self;
 }
 
+function ThrowAst(view, selector) {
+    var self = {
+        view: view,
+        selector: selector,
+        marked: {},
+        unit: function() {
+            return Step(marker(self), function(ctx) {
+                var obj = selector(ctx);
+                return Phase(Throw(obj), ctx);
+            }, unmarker(self));
+        },
+        accept_writer: function(offset, writer, shift) {
+            writer.write(self.marked, offset, self.view);
+            return writer;
+        }
+    };
+    return self;
+}
+
+// TODO: remove in favor of Throw
 function Abort(view) {
     var self = {
         marked: {},
@@ -279,10 +393,10 @@ function Cond(cond_view, predicate, body, alt) {
             }, unmarker(self));
         },
         accept_writer: function(offset, writer, shift) {
-            writer.write(self.marked, offset, "if (" + cond_view + ") {");
+            writer.write(self.marked, offset, hl2("if (" + cond_view + ") {"));
             body.accept_writer(offset+shift, writer, shift);
             if (alt) {
-                writer.write(false, offset, "} else {");
+                writer.write(false, offset, hl2("} else {"));
                 alt.accept_writer(offset+shift, writer, shift);
                 writer.write(false, offset, "}");
             } else {
@@ -307,6 +421,28 @@ function Fun(begin, body, end) {
             body.accept_writer(offset+shift, writer, shift);
             writer.write(false, offset, end);
             return writer;
+        }
+    };
+    return self;
+}
+
+
+function While(view_begin, pred, body, view_end) {
+    var self = {
+        marked: {},
+        unit: function() {
+            return Step(marker(self), function(ctx) {
+                if (pred(ctx)) {
+                    return Phase(body.unit().bind(self.unit()), ctx)
+                } else {
+                    return Phase(Unit(), ctx);
+                }    
+            }, unmarker(self));
+        },
+        accept_writer: function(offset, writer, shift) {
+            writer.write(self.marked, offset, view_begin);
+            body.accept_writer(offset+shift, writer, shift);
+            writer.write(self.marked, offset, view_end);
         }
     };
     return self;
@@ -364,6 +500,7 @@ function Each(selector, pack, begin, body, end) {
     return self;
 }
 
+// TODO: replace with Call2
 function Call(view, pack, fun, unpack) {
     var self = {
         view: view,
@@ -390,7 +527,58 @@ function Call(view, pack, fun, unpack) {
             var pause = Step(none, function(ctx) {
                 return Phase(Unit(), ctx);
             }, unmarker(self));
-            return call.bind(accept).bind(pause);
+            var catcher = Catch(function(obj) {
+                return Jump(function(ctx) {
+                    unmarker(self)(ctx.__thread);
+                    ctx.__thread.pop_frame();
+                    return Phase(Throw(obj), ctx.__seed);
+                });
+            }, Unit());
+            return call.bind(accept).bind(pause).bind(catcher);
+        },
+        accept_writer: function(offset, writer, shift) {
+            writer.write(self.marked, offset, view);
+            return writer;
+        }
+    };
+    return self;
+}
+
+function Call2(view, pack, fun, unpack) {
+    var self = {
+        view: view,
+        pack: pack,
+        fun: fun,
+        unpack: unpack,
+        marked: {},
+        unit: function() {
+            var call = Step(marker(self), function(ctx) {
+                var fun = self.fun(ctx);
+                ctx.__thread.push_frame();
+                var sub = pack(ctx);
+                sub.__seed = ctx;
+                sub.__fun = fun;
+                sub.__thread = ctx.__thread;
+                return Phase(fun.body.unit(), sub);
+            }, none);
+            var accept = AsAccept(Jump(function(ctx) {
+                var seed = ctx.__seed;
+                var ret = ctx.__ret;
+                ctx.__thread.pop_frame();
+                unpack(seed, ret);
+                return Phase(Unit(), seed);
+            }));
+            var pause = Step(none, function(ctx) {
+                return Phase(Unit(), ctx);
+            }, unmarker(self));
+            var catcher = Catch(function(obj) {
+                return Jump(function(ctx) {
+                    unmarker(self)(ctx.__thread);
+                    ctx.__thread.pop_frame();
+                    return Phase(Throw(obj), ctx.__seed);
+                });
+            }, Unit());
+            return call.bind(accept).bind(pause).bind(catcher);
         },
         accept_writer: function(offset, writer, shift) {
             writer.write(self.marked, offset, view);

@@ -3,7 +3,7 @@ HOWTO
 ### How to install the js build tools?
 
 brew install nodejs
-npm install --save react react-dom babelify babel-preset-react
+npm install --save react react-dom babelify babel-preset-react babel-preset-es2015
 npm install --save browserify
 
 ### How to build the app?
