@@ -1,22 +1,22 @@
-.details {
+.evil-scheduler .details {
     color: blue;
 }
 
-.thread-view .thread-control {
+.evil-scheduler .thread-view .thread-control {
     margin-bottom: 3px;
 }
 
-.thread-view .tv-btn {
+.evil-scheduler .thread-view .tv-btn {
     position: relative;
     bottom: 1px;
     margin-left: 3px;
 }
 
-.thread-view .tv-status {
+.evil-scheduler .thread-view .tv-status {
     margin-left: 3px;
 }
 
-.codeView {
+.evil-scheduler .codeView {
     padding: 5px;
     color: #F8F8F2;
     font-size: 0.8em;
@@ -24,66 +24,66 @@
     background-color: #282828;
 }
 
-.codeView .function {
+.evil-scheduler .codeView .function {
     color: #66D9EF;
     font-style: italic;
 }
 
-.codeView .var {
+.evil-scheduler .codeView .var {
     color: #66D9EF;
     font-style: italic;
 }
 
-.codeView .return {
+.evil-scheduler .codeView .return {
     color: #F92672;
 }
 
-.codeView .bool {
+.evil-scheduler .codeView .bool {
     color: #ae82ff;
 }
 
-.codeView .while {
+.evil-scheduler .codeView .while {
     color: #F92672;
 }
 
-.codeView .if {
+.evil-scheduler .codeView .if {
     color: #F92672;
 }
 
-.codeView .else {
+.evil-scheduler .codeView .else {
     color: #F92672;
 }
 
-.codeView .try {
+.evil-scheduler .codeView .try {
     color: #F92672;
 }
 
-.codeView .catch {
+.evil-scheduler .codeView .catch {
     color: #F92672;
 }
 
-.codeView .fun-name {
+.evil-scheduler .codeView .fun-name {
     color: #A6E22E;
 }
 
-.codeView .number {
+.evil-scheduler .codeView .number {
     color: #7FB347;
 }
 
-.codeView .string {
+.evil-scheduler .codeView .string {
     color: #e7db75;
 }
 
-.codeView .this {
+.evil-scheduler .codeView .this {
     color: #D197D9;
 }
 
-.codeView .code_link {
+.evil-scheduler .codeView .code_link {
     text-decoration: underline;
     color: #FD971F;
     cursor: pointer;
 }
 
-pre {
+.evil-scheduler pre {
     margin: 0;
 }

@@ -1,19 +1,14 @@
-body {
+.evil-scheduler {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
 }
 
-#ramp {
-    padding: 5px;
-}
-
-
-.menu {
+.evil-scheduler .menu {
     padding-top: 7px;
     padding-bottom: 7px;
 }
 
-.menu span {
+.evil-scheduler .menu span {
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 3px;
@@ -22,48 +17,48 @@ body {
     font-weight: bold;
 }
 
-.menu span.curr {
+.evil-scheduler .menu span.curr {
     background-color: #DDDDDD;
     color: black;
 }
 
-.menu span.free {
+.evil-scheduler .menu span.free {
     background-color: white;
     color: black;
     text-decoration: inherit;
     cursor: pointer;
 }
 
-.menu span.dis {
+.evil-scheduler .menu span.dis {
     color: #888888;
 }
 
 
-.value-table table {
+.evil-scheduler .value-table table {
     border-bottom: 1px solid;
 }
-.commit-table table {
+.evil-scheduler .commit-table table {
     border-bottom: 1px solid;
 }
-.proposer-table table {
+.evil-scheduler .proposer-table table {
     border-bottom: 1px solid;
 }
 
 
-.db2-view h3 {
+.evil-scheduler .db2-view h3 {
     font-size: 1.5em;
 }
-.db2-table {
+.evil-scheduler .db2-table {
     border-collapse: collapse;
 }
-.db2-table th {
+.evil-scheduler .db2-table th {
     border: 1px solid;
     text-align: center;
     background-color: #CCCCCC;
     padding-left: 5px;
     padding-right: 5px;
 }
-.db2-table .prop {
+.evil-scheduler .db2-table .prop {
     border: 1px solid;
     text-align: right;
     padding-left: 5px;
@@ -71,46 +66,46 @@ body {
     padding-top: 2px;
     padding-bottom: 2px;
 }
-.value-table .prop {
+.evil-scheduler .value-table .prop {
     border-top: 0 solid;
     border-bottom: 0 solid;
 }
-.commit-table .prop {
+.evil-scheduler .commit-table .prop {
     border-top: 0 solid;
     border-bottom: 0 solid;
 }
-.proposer-table .prop {
+.evil-scheduler .proposer-table .prop {
     border-top: 0 solid;
     border-bottom: 0 solid;
 }
 
-.db2-table th.empty {
+.evil-scheduler .db2-table th.empty {
     border: 0px solid;
     background-color: white;
 }
 
-.proposer-table {
+.evil-scheduler .proposer-table {
     margin-top: 15px;
 }
 
-.proposer-table .broadcast {
+.evil-scheduler .proposer-table .broadcast {
     margin-top: 5px;
 }
 
-.proposer-table .broadcast .title {
+.evil-scheduler .proposer-table .broadcast .title {
     margin-bottom: 3px;
     font-weight: 400;
 }
 
-.proposer-table .broadcast button {
+.evil-scheduler .proposer-table .broadcast button {
     margin-right: 3px;
 }
 
-.value-table .gc {
+.evil-scheduler .value-table .gc {
     margin-left: 5px;
 }
 
-.value-table .gc button {
+.evil-scheduler .value-table .gc button {
     position: relative;
     bottom: 3px;
 }
@@ -118,75 +113,58 @@ body {
 
 
 
-.sourceCode.fun {
+.evil-scheduler .sourceCode.fun {
     margin-top: 3px;
 }
 
-b {
+.evil-scheduler b {
     font-weight: bold;
-}
-
-
-
-#yabandeh {
-    margin-left: 2em;
-    margin-top: 1em;
-}
-
-#yabandeh h2 {
-    font-size: 1.2em;
-    margin-bottom: 4px;
-    font-weight: bold;
-}
-
-#yabandeh a {
-    color: blue;
 }
 
 /* columns */
 
-.first-td {
+.evil-scheduler .first-td {
     vertical-align: text-top;
 }
-.second-td {
+.evil-scheduler .second-td {
     vertical-align: text-top;
     padding-left: 5px;
 }
-.third-td {
+.evil-scheduler .third-td {
     vertical-align: text-top;
     padding-left: 5px;
 }
 
 /* */
 
-.third-td h3 {
+.evil-scheduler .third-td h3 {
     font-size: 1.1em;
     margin-bottom: 2px;
     font-weight: bold;
 }
 
-.second-td > .codeView {
+.evil-scheduler .second-td > .codeView {
     margin-bottom: 5px;
 }
 
 
 /* threadControl */
 
-.threadview .threadControl {
+.evil-scheduler .threadview .threadControl {
     margin-top: 3px;
 }
 
-.threadview .threadControl span {
+.evil-scheduler .threadview .threadControl span {
     margin-left: 0.5em;
     font-size: 1em;
 }
 
 /* varview */
 
-.var-table {
+.evil-scheduler .var-table {
     border-collapse: collapse;
 }
-.var-name {
+.evil-scheduler .var-name {
     text-align: right;
     padding-left: 5px;
     padding-right: 5px;
@@ -196,7 +174,7 @@ b {
     position: relative;
     top: -1px;
 }
-.var-value {
+.evil-scheduler .var-value {
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
@@ -204,22 +182,22 @@ b {
     padding-bottom: 2px;
 }
 
-.value-table {
+.evil-scheduler .value-table {
     border-collapse: collapse;
 }
-.value-table th.header {
+.evil-scheduler .value-table th.header {
     border: 1px solid;
     text-align: center;
     background-color: #CCCCCC;
     padding-left: 5px;
     padding-right: 5px;
 }
-.value-table th.header.prop {
+.evil-scheduler .value-table th.header.prop {
     padding-top: 2px;
     padding-bottom: 2px;
 }
-.value-table th.empty { }
-.value-table-obj .prop {
+.evil-scheduler .value-table th.empty { }
+.evil-scheduler .value-table-obj .prop {
     border: 1px solid;
     text-align: left;
     padding-left: 5px;
@@ -231,29 +209,29 @@ b {
 
 /* dbview, txview */
 
-.dbview table {
+.evil-scheduler .dbview table {
     border-collapse: collapse;
 }
-.dbview td {
+.evil-scheduler .dbview td {
     border: 1px solid;
     text-align: right;
     padding-right: 3px;
 }
-.dbview th {
+.evil-scheduler .dbview th {
     min-width: 2em;
     padding-left: 4px;
     padding-right: 4px;
 }
-.dbview .header th {
+.evil-scheduler .dbview .header th {
     padding-bottom: 3px;
     text-align: center;
 }
 
 
-.txview table {
+.evil-scheduler .txview table {
     border-collapse: collapse;
 }
-.txview td {
+.evil-scheduler .txview td {
     border: 1px solid;
     text-align: right;
     padding-right: 4px;
@@ -261,14 +239,14 @@ b {
     padding-top: 1px;
     padding-bottom: 1px;
 }
-.txview th {
+.evil-scheduler .txview th {
     min-width: 2em;
     padding-left: 4px;
     padding-right: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
 }
-.txview .header th {
+.evil-scheduler .txview .header th {
     padding-bottom: 3px;
     text-align: center;
 }
