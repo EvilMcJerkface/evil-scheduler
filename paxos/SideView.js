@@ -121,12 +121,12 @@ DBView = React.createClass({
                 var value = null;
                 if (acceptor.accepted[key].value!=null) {
                     var signs = [];
-                    for (var general in acceptor.accepted[key].value.signs) {
+                    for (var general in acceptor.accepted[key].value.signOffs) {
                         signs.push(general);
                     }
                     value = [{
-                        signs: signs,
-                        signed: acceptor.accepted[key].value.signed
+                        signOffs: signs,
+                        isSent: acceptor.accepted[key].value.isSent
                     }];
                 }
                 
