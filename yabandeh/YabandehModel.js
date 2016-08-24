@@ -20,20 +20,6 @@ db.put("a", {ver: 0, value: "\"a\"", future: null, tx_link: null});
 db.put("b", {ver: 0, value: "\"b\"", future: null, tx_link: null});
 db.put("c", {ver: 0, value: "\"c\"", future: null, tx_link: null});
 
-function equal(x,y) {
-    return sub(x,y) && sub(y,x);
-    function sub(x,y) {
-        for (var prop in x) {
-            if (x.hasOwnProperty(prop)) {
-                if (x[prop]!=y[prop]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-}
-
 var __clean_read = Fun(hl2("function clean_read(key) {"), Seq([
     Statement(hl2("var obj = db.get(key);"), function(ctx) { ctx.obj = db.get(ctx.key); }),
     Cond("obj.tx_link != null", function(ctx) { return ctx.obj.tx_link != null; }, Seq([
@@ -64,8 +50,8 @@ var __clean_read = Fun(hl2("function clean_read(key) {"), Seq([
         Cond("status == \"committed\"", function(ctx) { return ctx.status == "committed"; }, Seq([
             Statement(hl2("var clean = {\n  value: obj.future,\n  ver: obj.ver + 1,\n  tx_link: null\n};"), 
                       function(ctx) { ctx.clean = {value: ctx.obj.future, ver: ctx.obj.ver + 1, tx_link: null}; }),
-            Statement(hl2("var cond = function(x) {\n  return equal(x, clean) || x.ver==obj.ver;\n};"), 
-                      function(ctx) { ctx.cond = function(x) { return equal(x, ctx.clean) || x.ver==ctx.obj.ver; }; }),
+            Statement(hl2("var cond = function(x) {\n  return (x.ver==obj.ver+1) || (x.ver==obj.ver);\n};"), 
+                      function(ctx) { ctx.cond = function(x) { return (x.ver==obj.ver+1) || (x.ver==ctx.obj.ver); }; }),
             Cond("db.put_if(key, clean, cond)", function(ctx) { return db.put_if(ctx.key, ctx.clean, ctx.cond); }, Seq([
                 Return(hl2("return clean;"), function(ctx) { return ctx.clean; })
             ]))
