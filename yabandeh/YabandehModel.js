@@ -51,7 +51,7 @@ var __clean_read = Fun(hl2("function clean_read(key) {"), Seq([
             Statement(hl2("var clean = {\n  value: obj.future,\n  ver: obj.ver + 1,\n  tx_link: null\n};"), 
                       function(ctx) { ctx.clean = {value: ctx.obj.future, ver: ctx.obj.ver + 1, tx_link: null}; }),
             Statement(hl2("var cond = function(x) {\n  return (x.ver==obj.ver+1) || (x.ver==obj.ver);\n};"), 
-                      function(ctx) { ctx.cond = function(x) { return (x.ver==obj.ver+1) || (x.ver==ctx.obj.ver); }; }),
+                      function(ctx) { ctx.cond = function(x) { return (x.ver==ctx.obj.ver+1) || (x.ver==ctx.obj.ver); }; }),
             Cond("db.put_if(key, clean, cond)", function(ctx) { return db.put_if(ctx.key, ctx.clean, ctx.cond); }, Seq([
                 Return(hl2("return clean;"), function(ctx) { return ctx.clean; })
             ]))
